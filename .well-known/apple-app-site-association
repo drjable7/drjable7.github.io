@@ -1,0 +1,17 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["GRAV934JW4.com.drjable7.golfgames"],
+        "components": [
+          { "/": "/wolf/join/*", "comment": "Join a shared Wolf game" },
+          { "/": "/wolf/join", "comment": "Join a shared Wolf game" },
+          { "/": "/scramble/join/*", "comment": "Join a shared 2 vs 2 or 6-6-6 game" },
+          { "/": "/scramble/join", "comment": "Join a shared 2 vs 2 or 6-6-6 game" },
+          { "/": "/tournament/join/*", "comment": "Join a shared Stroke Play Tournament" },
+          { "/": "/tournament/join", "comment": "Join a shared Stroke Play Tournament" }
+        ]
+      }
+    ]
+  }
+}

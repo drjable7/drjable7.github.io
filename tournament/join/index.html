@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Stroke Play Tournament · Live Scoring · Golf Games</title>
+<meta name="description" content="Live leaderboard for your golf weekend. Golf Games keeps score, handicaps and payouts for golf side games.">
+<meta property="og:title" content="Stroke Play Tournament · Live Scoring">
+<meta property="og:description" content="Live leaderboard for your golf weekend. Tap to follow along, no app needed.">
+<meta property="og:image" content="https://drjable7.github.io/images/share-tournament.jpg">
+<meta name="theme-color" content="#1e7d4a">
+<link rel="icon" href="/images/app-icon.webp">
+<link rel="apple-touch-icon" href="/images/app-icon.webp">
+<link rel="stylesheet" href="/scoreboard.css">
+</head>
+<body>
+<div class="landscape-bar">
+  <img id="landscape-logo" src="/images/tournament.webp" alt="">
+  <span class="lb-name"><span id="landscape-name">Stroke Play Tournament</span> · Golf Games</span>
+  <span class="lb-status" id="landscape-status"></span>
+</div>
+<header class="hero">
+  <div class="brand"><img src="/images/app-icon.webp" alt="">Golf Games</div>
+  <img class="hero-logo" id="hero-logo" src="/images/tournament.webp" alt="Stroke Play Tournament">
+  <h1 id="game-name">Stroke Play Tournament</h1>
+  <p class="tagline">Live leaderboard for your golf weekend</p>
+</header>
+<main>
+  <div class="welcome">
+    <h2>Welcome to live scoring for your group!</h2>
+    <p>Follow the leaderboard, payouts and scorecard as every group posts its scores. Scorers: keep score in the Golf Games app. It updates on its own, and screenshots are welcome.</p>
+    <div class="code-chip" id="code">----</div>
+  </div>
+  <div class="live"><span class="live-dot" id="live-dot" hidden></span><span id="live"></span></div>
+  <div id="board"></div>
+
+  <section class="share-row" id="share-row" hidden>
+    <button type="button" class="share-button" id="share-button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>
+      Share this scoreboard
+    </button>
+    <p class="share-hint" id="share-hint">Post the live link to Instagram, Facebook, X or your group text, or take a screenshot.</p>
+    <div class="share-links" id="share-links" hidden>
+      <a id="share-x" target="_blank" rel="noopener">X</a>
+      <a id="share-facebook" target="_blank" rel="noopener">Facebook</a>
+      <a id="share-instagram" target="_blank" rel="noopener">Instagram</a>
+      <button type="button" id="share-copy">Copy link</button>
+    </div>
+  </section>
+
+  <section class="upsell" aria-labelledby="full-game">
+    <div class="upsell-top">
+      <img src="/images/app-icon.webp" alt="Golf Games app icon">
+      <div><h2 id="full-game">Get the full game</h2><p class="sub">Golf Games for iPhone</p></div>
+    </div>
+    <div class="games">
+      <figure><img src="/images/wolf.webp" alt="">Wolf</figure>
+      <figure><img src="/images/scramble.webp" alt="">2 vs 2</figure>
+      <figure><img src="/images/sixsixsix.webp" alt="">6-6-6</figure>
+      <figure><img src="/images/tournament.webp" alt="">Tournament</figure>
+    </div>
+    <ul class="features">
+      <li>Run your own games: Wolf, 2 vs 2, 6-6-6 and Stroke Play Tournaments, with more on the way</li>
+      <li>Just enter gross scores. Handicaps, net scores, points and payouts are worked out for you</li>
+      <li>Full round stats and season stats for everyone in your group</li>
+      <li>Share live with your group by text, AirDrop or QR code</li>
+    </ul>
+    <div class="lookfor">
+      <p class="lookfor-label">Look for this in the App Store</p>
+      <a class="listing store-link" href="APP_STORE_LINK">
+        <img src="/images/app-icon.webp" alt="The Golf Games app icon">
+        <span class="listing-text"><strong>Golf Games</strong><span>Wolf, 2v2, 6-6-6 &amp; Tournaments</span><span>Sports</span></span>
+        <span class="view">View</span>
+      </a>
+    </div>
+    <a class="store-button" id="store" href="APP_STORE_LINK">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M12 7v7m0 0-3-3m3 3 3-3M10 18h4"/></svg>
+      <span><span class="small">Download on the</span><span class="big">App Store</span></span>
+    </a>
+    <p class="price-note">One small, one-time price. No subscription, no ads, no account.</p>
+  </section>
+
+  <div class="store-bar" id="store-bar">
+    <img src="/images/app-icon.webp" alt="">
+    <div class="text"><strong>Golf Games</strong>Keep score, handicaps &amp; payouts</div>
+    <a href="APP_STORE_LINK" class="store-link">Get the App</a>
+  </div>
+
+  <footer>
+    Live scoring by <strong>Golf Games</strong> · <a href="/privacy/">Privacy</a> · <a href="/support/">Support</a><br>
+    Shared for 7 days after the last score.<br>
+    © 2026 James Hable. All rights reserved.
+  </footer>
+</main>
+<script src="/scoreboard.js"></script>
+<script>
+  // The App Store link, once the app is published. Until then, an App Store search.
+  document.querySelectorAll("#store, .store-link").forEach(function (link) {
+    if (link.getAttribute("href") === "APP_STORE_LINK") link.href = "https://apps.apple.com/us/search?term=golf%20games";
+  });
+  // The bottom bar steps aside while the big "Get the full game" card is on screen.
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(function (entries) {
+      document.getElementById("store-bar").classList.toggle("hidden", entries[0].isIntersecting);
+    }).observe(document.querySelector(".upsell"));
+  }
+
+  // The code comes after "#", which the browser never sends to this website.
+  var raw = location.hash.slice(1) || new URLSearchParams(location.search).get("code") || "";
+  var code = raw.toUpperCase().replace(/[^A-Z0-9]/g, "");
+  if (code.length !== 12) code = "";
+  document.getElementById("code").textContent = code ? "Code " + code.match(/.{4}/g).join("-") : "No code yet";
+  window.addEventListener("hashchange", function () { location.reload(); });
+
+  // Sharing: the phone's share sheet where there is one, otherwise X, Facebook, Threads or copy.
+  function setUpSharing(board) {
+    var row = document.getElementById("share-row");
+    if (!code || !row.hidden) return;
+    row.hidden = false;
+    var text = board.title + " · " + board.status + ": follow the live " + board.game + " scoreboard ⛳️ #GolfGames";
+    var url = location.href;
+    document.getElementById("share-button").onclick = function () {
+      if (navigator.share) {
+        navigator.share({ title: board.game + " · " + board.title, text: text, url: url }).catch(function () {});
+      } else {
+        document.getElementById("share-links").hidden = false;
+      }
+    };
+    document.getElementById("share-x").href = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(text) + "&url=" + encodeURIComponent(url);
+    document.getElementById("share-facebook").href = "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(url);
+    // Instagram has no web share link: copy the caption and link, then open Instagram to paste them.
+    var insta = document.getElementById("share-instagram");
+    insta.href = "https://www.instagram.com/";
+    insta.onclick = function () {
+      if (navigator.clipboard) navigator.clipboard.writeText(text + " " + url);
+      document.getElementById("share-hint").textContent = "Caption and link copied. Paste them into your Instagram story or post.";
+    };
+    document.getElementById("share-copy").onclick = function () {
+      navigator.clipboard.writeText(url).then(function () { document.getElementById("share-copy").textContent = "Copied!"; });
+    };
+  }
+  GolfScoreboard.start(document.getElementById("board"), "tournament", code, document.getElementById("live"), function (board) {
+    setUpSharing(board);
+  });
+</script>
+</body>
+</html>

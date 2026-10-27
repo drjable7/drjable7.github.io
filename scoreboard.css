@@ -1,0 +1,144 @@
+/* Golf Games live scoreboard and share landing page. Screenshots are welcome: nothing here blocks them. */
+:root {
+  color-scheme: light dark;
+  --ink: #14261a; --muted: #5d6b62; --bg: #eef3ef; --card: #ffffff; --line: #e3e9e4;
+  --green: #1e7d4a; --green-dark: #135c35; --gold: #f2b631; --red: #d93a2b; --par: #f3f7f4;
+  --sky-top: #6fc3ff; --sky-bottom: #c9ecff; --grass: #3fa355; --grass-dark: #2f8a44;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --ink: #f1f5f2; --muted: #a3b1a8; --bg: #0b130e; --card: #17221b; --line: #2a372f; --par: #1f2c24; --sky-top: #123a5c; --sky-bottom: #1d5a7d; --grass: #23683a; --grass-dark: #1a5230; }
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--bg); color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", Roboto, "Segoe UI", system-ui, sans-serif; -webkit-text-size-adjust: 100%; }
+main { max-width: 760px; margin: 0 auto; padding: 0 16px 24px; }
+
+/* Hero: sky, clouds and a fairway behind the game's character. */
+.hero { position: relative; overflow: hidden; text-align: center; color: #fff; padding: 18px 16px 30px;
+        background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-bottom) 55%, var(--grass) 55%, var(--grass-dark) 100%); }
+.hero::before, .hero::after { content: ""; position: absolute; background: rgba(255,255,255,.85); border-radius: 50px; filter: blur(.3px); }
+.hero::before { width: 120px; height: 34px; top: 26px; left: 8%; box-shadow: 40px -14px 0 4px rgba(255,255,255,.85); }
+.hero::after { width: 100px; height: 28px; top: 60px; right: 9%; box-shadow: -34px -12px 0 2px rgba(255,255,255,.8); }
+.brand { position: relative; display: inline-flex; align-items: center; gap: 8px; background: rgba(0,0,0,.35); padding: 6px 12px 6px 6px; border-radius: 999px; font-weight: 800; letter-spacing: 1.5px; font-size: 13px; text-transform: uppercase; }
+.brand img { width: 28px; height: 28px; border-radius: 7px; }
+.hero-logo { position: relative; display: block; width: 168px; height: 168px; margin: 16px auto 10px; border-radius: 36px; border: 5px solid #fff; box-shadow: 0 10px 28px rgba(0,0,0,.35); background: #fff; object-fit: cover; }
+.hero h1 { position: relative; margin: 6px 0 4px; font-size: 32px; font-weight: 900; letter-spacing: .5px; text-shadow: 0 2px 6px rgba(0,0,0,.45); }
+.hero .tagline { position: relative; margin: 0 auto; max-width: 440px; font-size: 16px; font-weight: 600; text-shadow: 0 1px 4px rgba(0,0,0,.5); }
+
+.welcome { background: var(--card); border-radius: 20px; padding: 16px 18px; margin: -18px 0 14px; position: relative; box-shadow: 0 6px 18px rgba(0,0,0,.08); text-align: center; }
+.welcome h2 { margin: 0 0 4px; font-size: 19px; }
+.welcome p { margin: 0; color: var(--muted); line-height: 1.45; font-size: 15px; }
+.code-chip { display: inline-block; margin-top: 10px; font: 700 15px ui-monospace, "SF Mono", Menlo, monospace; letter-spacing: 1px; background: var(--par); color: var(--muted); padding: 6px 10px; border-radius: 10px; }
+
+/* Live status */
+.live { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 13px; color: var(--muted); margin: 4px 0 12px; min-height: 20px; text-align: center; }
+.live-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--red); box-shadow: 0 0 0 0 rgba(217,58,43,.6); animation: pulse 1.8s infinite; flex: none; }
+.live-dot[hidden] { display: none; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(217,58,43,.6); } 70% { box-shadow: 0 0 0 9px rgba(217,58,43,0); } 100% { box-shadow: 0 0 0 0 rgba(217,58,43,0); } }
+
+/* Scoreboard */
+.board-header { text-align: center; margin: 2px 0 12px; }
+.board-game { display: inline-block; color: #fff; background: var(--green); font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; padding: 4px 10px; border-radius: 999px; }
+.board-title { margin: 8px 0 2px; font-size: 24px; font-weight: 800; }
+.board-status { color: var(--muted); font-size: 15px; font-weight: 600; }
+.board-section { background: var(--card); border-radius: 20px; padding: 14px 14px 10px; margin-bottom: 14px; box-shadow: 0 2px 10px rgba(0,0,0,.05); }
+.board-section h2 { font-size: 17px; margin: 0 0 8px; display: flex; align-items: center; gap: 8px; }
+.board-section h2::before { content: ""; width: 4px; height: 18px; border-radius: 2px; background: var(--gold); }
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+table { width: 100%; border-collapse: collapse; font-size: 15px; font-variant-numeric: tabular-nums; }
+th { text-align: left; font-size: 12px; color: var(--muted); font-weight: 700; padding: 6px 8px; border-bottom: 1px solid var(--line); text-transform: uppercase; letter-spacing: .3px; }
+td { padding: 9px 8px; border-bottom: 1px solid var(--line); }
+tr:last-child td { border-bottom: none; }
+tr.leader td { font-weight: 800; }
+tr.leader td:first-child { color: var(--green); }
+.scorecard table { width: auto; min-width: 100%; }
+.scorecard th, .scorecard td { text-align: center; padding: 6px 7px; white-space: nowrap; }
+.scorecard th:first-child, .scorecard td:first-child { text-align: left; position: sticky; left: 0; background: var(--card); font-weight: 700; }
+.scorecard .par-row td, .scorecard .par-row td:first-child { background: var(--par); color: var(--muted); }
+.note { color: var(--muted); font-size: 13px; margin: 8px 0 0; line-height: 1.4; }
+.swipe-hint { color: var(--muted); font-size: 12px; margin: 0 0 6px; }
+
+/* The full game */
+.upsell { background: linear-gradient(160deg, var(--green) 0%, var(--green-dark) 100%); color: #fff; border-radius: 22px; padding: 20px 18px; margin: 18px 0 14px; box-shadow: 0 8px 22px rgba(19,92,53,.35); }
+.upsell-top { display: flex; align-items: center; gap: 14px; }
+.upsell-top img { width: 64px; height: 64px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,.3); flex: none; }
+.upsell h2 { margin: 0; font-size: 21px; font-weight: 800; }
+.upsell .sub { margin: 2px 0 0; opacity: .9; font-size: 14px; }
+.games { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 16px 0 12px; }
+.games figure { margin: 0; text-align: center; font-size: 11px; font-weight: 700; }
+.games img { width: 100%; aspect-ratio: 1; border-radius: 14px; border: 2px solid rgba(255,255,255,.85); object-fit: cover; display: block; margin-bottom: 4px; background: #fff; }
+.features { list-style: none; padding: 0; margin: 0 0 16px; display: grid; gap: 7px; font-size: 15px; }
+.features li { display: flex; gap: 8px; align-items: flex-start; line-height: 1.35; }
+.features li::before { content: "⛳"; flex: none; }
+.store-button { display: flex; align-items: center; justify-content: center; gap: 10px; background: #000; color: #fff; text-decoration: none; border-radius: 14px; padding: 13px 16px; border: 1px solid rgba(255,255,255,.35); }
+.store-button .small { display: block; font-size: 11px; opacity: .85; }
+.store-button .big { display: block; font-size: 20px; font-weight: 700; letter-spacing: .2px; line-height: 1.1; }
+.store-button svg { width: 26px; height: 26px; flex: none; }
+.price-note { text-align: center; font-size: 13px; opacity: .9; margin: 10px 0 0; }
+
+/* Problems: no code, a code that's wrong or ended, setup not finished */
+.problem { background: var(--card); border-radius: 22px; padding: 22px 18px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,.05); }
+.problem .flag { font-size: 40px; line-height: 1; }
+.problem h2 { margin: 8px 0 6px; font-size: 21px; }
+.problem p { margin: 0 0 12px; color: var(--muted); line-height: 1.45; }
+.code-form { display: flex; gap: 8px; margin: 6px 0 14px; }
+.code-form input { flex: 1; min-width: 0; font: 600 17px ui-monospace, "SF Mono", Menlo, monospace; text-transform: uppercase; letter-spacing: 1px; padding: 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--par); color: var(--ink); }
+.code-form button { font-size: 16px; font-weight: 700; padding: 0 18px; border-radius: 12px; border: none; background: var(--green); color: #fff; }
+.ways { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; text-align: left; }
+.ways li { display: flex; gap: 10px; align-items: center; background: var(--par); border-radius: 12px; padding: 10px 12px; font-size: 14px; }
+.ways li span:first-child { font-size: 20px; }
+.retrying { color: var(--muted); text-align: center; padding: 20px; }
+
+footer { text-align: center; color: var(--muted); font-size: 13px; margin: 18px 0 8px; line-height: 1.5; }
+footer a { color: var(--green); }
+
+/* A slim App Store bar pinned to the bottom, hidden while the full-game card is on screen. */
+.store-bar { position: fixed; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); max-width: 736px; margin: 0 auto;
+             display: flex; align-items: center; gap: 10px; background: rgba(20,38,26,.92); color: #fff; border-radius: 16px; padding: 8px 8px 8px 10px;
+             box-shadow: 0 8px 24px rgba(0,0,0,.3); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); transition: transform .25s ease, opacity .25s ease; z-index: 10; }
+.store-bar.hidden { transform: translateY(140%); opacity: 0; pointer-events: none; }
+.store-bar img { width: 38px; height: 38px; border-radius: 9px; flex: none; }
+.store-bar .text { flex: 1; min-width: 0; font-size: 13px; line-height: 1.25; }
+.store-bar .text strong { display: block; font-size: 15px; }
+.store-bar a { flex: none; background: #fff; color: #000; text-decoration: none; font-weight: 800; font-size: 14px; padding: 9px 14px; border-radius: 999px; }
+main { padding-bottom: 90px; }
+
+/* "Look for this in the App Store": the app's real icon, name and subtitle, styled like a search result. */
+.lookfor { margin: 0 0 12px; }
+.lookfor-label { margin: 0 0 6px; font-size: 12px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; opacity: .9; text-align: center; }
+.listing { display: flex; align-items: center; gap: 12px; background: #fff; color: #111; border-radius: 16px; padding: 10px 12px; text-decoration: none; box-shadow: 0 4px 14px rgba(0,0,0,.2); }
+.listing img { width: 72px; height: 72px; border-radius: 16px; flex: none; box-shadow: 0 0 0 1px rgba(0,0,0,.08); }
+.listing-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.listing-text strong { font-size: 18px; }
+.listing-text span { font-size: 13px; color: #6c6c70; }
+.listing .view { flex: none; background: #eef0f4; color: #0a66d6; font-weight: 800; font-size: 14px; padding: 7px 16px; border-radius: 999px; }
+
+/* Sideways phone: the full scorecard front and center under a slim header. */
+.landscape-bar { display: none; }
+@media (orientation: landscape) and (max-height: 520px) {
+  .hero, .welcome, #board .board-header, .swipe-hint { display: none; }
+  .landscape-bar { display: flex; align-items: center; gap: 10px; padding: 8px max(16px, env(safe-area-inset-left)); background: var(--green); color: #fff; position: sticky; top: 0; z-index: 5; }
+  .landscape-bar img { width: 34px; height: 34px; border-radius: 9px; border: 2px solid #fff; object-fit: cover; }
+  .landscape-bar .lb-name { font-weight: 900; font-size: 16px; white-space: nowrap; }
+  .landscape-bar .lb-status { font-size: 13px; opacity: .9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0; }
+  main { max-width: none; padding-left: max(12px, env(safe-area-inset-left)); padding-right: max(12px, env(safe-area-inset-right)); }
+  .live { margin: 6px 0; justify-content: flex-start; }
+  #board { display: flex; flex-direction: column; }
+  #board .scorecard-section { order: -1; }
+  .scorecard table { width: 100%; }
+  .scorecard th, .scorecard td { padding: 5px 2px; font-size: 13px; }
+  .scorecard th:first-child, .scorecard td:first-child { padding-right: 8px; }
+  .store-bar { left: auto; right: max(12px, env(safe-area-inset-right)); width: auto; padding: 6px; gap: 8px; }
+  .store-bar .text { display: none; }
+  .store-bar img { width: 32px; height: 32px; }
+}
+
+/* Share this scoreboard */
+.share-row { text-align: center; margin: 6px 0 4px; }
+.share-row[hidden] { display: none; }
+.share-button { display: inline-flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 700; color: var(--green); background: var(--card); border: 2px solid var(--green); border-radius: 999px; padding: 10px 20px; cursor: pointer; }
+.share-button svg { width: 18px; height: 18px; }
+.share-hint { color: var(--muted); font-size: 13px; margin: 8px 0 0; }
+.share-links { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.share-links[hidden] { display: none; }
+.share-links a, .share-links button { font-size: 14px; font-weight: 700; color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 7px 14px; text-decoration: none; cursor: pointer; }
