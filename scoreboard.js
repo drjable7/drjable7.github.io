@@ -9,7 +9,7 @@ const GOLF_GAMES_CLOUDKIT = {
   container: "iCloud.com.drjable7.golfgames",
   environment: "production",
   // A read-only CloudKit API token (CloudKit Console > API Access > Tokens). See PUBLISHING.md.
-  apiToken: "YOUR_CLOUDKIT_API_TOKEN",
+  apiToken: "a9b25b6c1fbbd56b0a000b622cbf514aef8ba596d37096abe457654f013b973b",
 };
 
 // How each game files and seals its shared record (must match the app).
